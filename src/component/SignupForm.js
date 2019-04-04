@@ -11,9 +11,15 @@ class SignupForm extends React.Component {
   };
 
   onSignUp = () => {
-    localStorage.setItem('user', JSON.stringify(this.state));
-    alert('Sign up successful');
-    console.log(localStorage.getItem('user'));
+
+    const { firstname, lastname, email, password } = this.state;
+    if (firstname == '' || lastname == '' || email == '' || password == '') {
+      alert('Please Enter valid details')
+    } else {
+      localStorage.setItem('user', JSON.stringify(this.state));
+      alert('Sign up successful');
+    }
+
   };
 
   render() {
@@ -28,7 +34,7 @@ class SignupForm extends React.Component {
 
           <form className="ui large form">
             <div className="ui stacked segment">
-            
+
               <Inputs
                 inputId={'firstname'}
                 inputType={'text'}

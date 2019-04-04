@@ -13,29 +13,31 @@ class Input extends React.Component {
     const { inputType, handlechange, name } = this.props;
     const { value } = this.state;
     const { regex, errorMsg } = ValidationSchema[inputType];
+    let msg = '';
     if (!value) {
-      this.setState({
-        errorMesssage: 'Field can not be empty'
-      });
-    } else if (!regex.test(value)) {
-      this.setState({
-        errorMesssage: errorMsg
-      });
+      msg = 'Field can not be empty';
+    } else {
+      if (!regex.test(value)) {
+        msg = errorMsg;
+      } else {
+        handlechange(value, name);
+      }
     }
-    else {
-      handlechange(value, name);
-    }
+    this.setState({
+      errorMesssage: msg
+    })
   }
   render() {
+    const { inputId, name, inputType, value, placeholder } = this.props;
     return (
       <div className="field">
-        <input  
-          id={this.props.inputId}
-          name={this.props.name}
-          type={this.props.inputType}
-          value={this.state.value}
+        <input
+          id={inputId}
+          name={name}
+          type={inputType}
+          value={value}
           onChange={(e) => { this.setState({ value: e.target.value }) }}
-          placeholder={this.props.placeholder}
+          placeholder={placeholder}
           onBlur={this.InputValidation}
           onFocus={(event) => { this.setState({ errorMesssage: '' }) }}
         />

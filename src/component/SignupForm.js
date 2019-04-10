@@ -1,14 +1,29 @@
 import React from 'react';
 import Inputs from './input';
+import '../style/style.css';
 
 class SignupForm extends React.Component {
 
   state = {
-    firstname: '',
-    lastname: '',
+    firstName: '',
+    lastName: '',
     email: '',
-    password: ''
+    password: '',
+    watchlater:[],
+    history : []
   };
+
+  componentDidMount() {
+
+    let arr = [];
+    arr = JSON.parse(localStorage.getItem('user'));
+
+    if (arr != null) {
+      alert("Please Logout First Then Add New Account..")
+       this.props.history.push('/homepage');
+    }
+ }
+
 
   onSignUp = () => {
 
@@ -18,13 +33,14 @@ class SignupForm extends React.Component {
     } else {
       localStorage.setItem('user', JSON.stringify(this.state));
       alert('Sign up successful');
+      this.props.history.push('/homepage');
     }
 
   };
 
   render() {
     return (
-      <div className="ui middle aligned center aligned grid log">
+      <div className="ui middle aligned center aligned grid log sign" >
         <div className="column">
           <h2 className="ui header">
             <div className="">
@@ -41,7 +57,7 @@ class SignupForm extends React.Component {
                 title={'Full Name'}
                 name={'firstName'}
                 placeholder={'First Name'}
-                handlechange={(value, name) => { this.setState({ [name]: value }); }}
+                handlechange={(value, name) => { this.setState({ [name]:value }); }}
               />
 
               <Inputs

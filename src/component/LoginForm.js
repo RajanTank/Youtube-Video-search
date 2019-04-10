@@ -1,6 +1,7 @@
 import React from 'react';
 import Inputs from './input';
-import '../style/Login.css';
+import '../style/style.css';
+
 
 class LoginForm extends React.Component {
 
@@ -9,19 +10,31 @@ class LoginForm extends React.Component {
       password: ''
    };
 
+   componentDidMount() {
+
+      let arr = [];
+      arr = JSON.parse(localStorage.getItem('user'));
+
+      if (arr != null) {
+         this.props.history.push('/homepage');
+      }
+   }
+
    authenticateUser = () => {
       const temp = JSON.parse(localStorage.getItem('user'));
       if (temp['email'] == this.state.email && temp['password'] == this.state.password) {
          alert('successful');
+         this.props.history.push('/homepage');
       }
       else {
          alert('Plz enter valid email id and password');
       }
    }
-
    render() {
+
+
       return (
-         <div className="ui middle aligned center aligned grid log">
+         <div className="ui middle aligned center aligned grid log login" >
             <div className="column">
                <h2 className="ui header">
                   <div className="">

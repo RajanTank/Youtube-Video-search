@@ -7,7 +7,8 @@ import Video from '../component/video';
 import { Grid } from 'semantic-ui-react';
 import VideoDetail from '../component/VideoDetails';
 import VideoList from '../component/VideoList';
-
+import { NotificationWarn}  from '../Utility /utility'
+import {firstLogin} from '../Utility /label'
 
 class History extends React.Component {
 
@@ -31,7 +32,7 @@ class History extends React.Component {
 
    onHistoryVideoSelect = (video) => {
       this.setState({ videoSelect: video });
-    
+
    }
 
    onVideoSelect = (video, videos) => {
@@ -44,7 +45,7 @@ class History extends React.Component {
       dummyArray = JSON.parse(localStorage.getItem('user'));
       if (dummyArray) {
          dummyArray.history.splice(dummyArray.watchlater.indexOf(ids), 1);
-         this.setState({ids:dummyArray.history});
+         this.setState({ ids: dummyArray.history });
          localStorage.setItem('user', JSON.stringify(dummyArray));
       }
 
@@ -56,6 +57,7 @@ class History extends React.Component {
       if (videoArray) {
          this.setState({ ids: videoArray.history });
       }
+
    }
 
 
@@ -63,7 +65,8 @@ class History extends React.Component {
 
       let dummy = JSON.parse(localStorage.getItem('user'));
       if (dummy == null) {
-         alert('please Login First to Access this page')
+         NotificationWarn(firstLogin);
+
          this.props.history.push('/');
       }
    }
@@ -90,6 +93,7 @@ class History extends React.Component {
       }
       return (
          <>
+
             <SearchBar onFormSubmit={this.onTermSubmit} />
             <Grid relaxed celled>
                <Grid width={3}>

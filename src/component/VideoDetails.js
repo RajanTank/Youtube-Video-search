@@ -1,38 +1,43 @@
 import React from 'react'
+import { GetLocalstorage, SetLocalstorage, NotificationError } from '../Utility /utility';
 
 class VideoDetail extends React.Component {
 
-
-   addToHistory = () =>{
+   addToHistory = () => {
       let dummyArray = [];
-      dummyArray = JSON.parse(localStorage.getItem('user'));
+      dummyArray = GetLocalstorage();
       dummyArray.history.push(this.props.video.id.videoId);
-      localStorage.setItem('user',JSON.stringify(dummyArray));
+      SetLocalstorage(dummyArray);
    }
 
+   validVideo = () => {
 
-   componentWillUpdate(){
-      if(!this.props.video)
-      {
-         return <div></div>
-      }
-         this.addToHistory();
-   }
-   componentDidMount(){
-
-      if(!this.props.video)
-      {
-         return <div></div>
-      }
-         this.addToHistory();
-   }
-
-   render() {
       if (!this.props.video) {
          return <div></div>
       }
+   };
 
-      const {snippet,id} = this.props.video
+   componentWillUpdate() {
+
+      this.validVideo();
+
+      this.addToHistory();
+   }
+   componentDidMount() {
+
+      this.validVideo();
+
+      this.addToHistory();
+   }
+
+   render() {
+      this.validVideo();
+
+      const { snippet, id } = this.props.video
+      if (id == null) {
+         NotificationError(`can't featch video`);
+         return null;
+      }
 
       const videoSrc = `https://www.youtube.com/embed/${id.videoId}?autoplay=1`
 

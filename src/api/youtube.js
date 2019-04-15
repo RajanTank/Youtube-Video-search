@@ -1,15 +1,12 @@
 import axios from 'axios';
+import {KEY,baseUrl} from '../config/config';
 
-
-// const KEY ='AIzaSyBmctwBX84fmmweUPTCeiCJ87omLGGWB30';
-// const KEY ='AIzaSyDCaoflqhPGGQgBAp82mVmiTQLzsJPAcmE';
-const KEY = 'AIzaSyC4NmD6_LsTwuYW6eqmCgf46kng-Q4OkVs'
 
 export default axios.create({
-   baseURL: 'https://www.googleapis.com/youtube/v3',
+   baseURL: baseUrl,
    params: {
       part : 'snippet',
-      key: KEY
+      key: process.env.REACT_APP_SECRET_KEY
    }
 
-});
+});   

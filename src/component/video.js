@@ -1,17 +1,26 @@
 import React from 'react';
+import { NotificationError } from '../Utility /utility';
 
-class Video extends React.Component{
-   render(){
+class Video extends React.Component {
 
-      if(!this.props.videoData){
-         return(
-            <div></div>
-         );
+   componentDidMount() {
+
+      if (!this.props.videoData) {
+         return null;
       }
-      const {id,snippet} = this.props.videoData;
+   }
+
+   render() {
+
+      const { id, snippet } = this.props.videoData;
+      if(id == null){
+         NotificationError(`can't featch video`);
+         return null;
+      }
+
 
       const videoSrc = `https://www.youtube.com/embed/${id}?autoplay=1`
-      return(
+      return (
          <div style={{ width: '900px', height: '600px', margin: '5px' }} >
             <div className="ui embed">
                <iframe title='video player' src={videoSrc} />

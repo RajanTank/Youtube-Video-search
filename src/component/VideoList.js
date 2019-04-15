@@ -1,13 +1,14 @@
 import React from 'react';
 import VideoItem from './VideoItem';
+import {GetLocalstorage,SetLocalstorage} from '../Utility /utility';
 
 class VideoList extends React.Component {
 
    addToHistory = () => {
       let dummyArray = [];
-      dummyArray = JSON.parse(localStorage.getItem('user'));
+      dummyArray = GetLocalstorage();
       dummyArray.history.push(this.props.video.id.videoId);
-      localStorage.setItem('user', JSON.stringify(dummyArray));
+      SetLocalstorage(dummyArray);
    }
 
    render() {

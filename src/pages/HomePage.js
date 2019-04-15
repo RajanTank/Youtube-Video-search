@@ -7,6 +7,9 @@ import { Grid } from 'semantic-ui-react';
 import ContentData from '../component/ContentData'
 import FormSubmit from '../component/FormSubmit';
 import '../style/Grid.css';
+import { NotificationWarn } from '../Utility /utility';
+import {firstLogin} from '../Utility /label'
+
 
 class HomePage extends React.Component {
 
@@ -18,9 +21,7 @@ class HomePage extends React.Component {
          this.setState({
             videos: response
          });
-
       });
-
    };
 
    onVideoSelect = (video, videos) => {
@@ -30,16 +31,17 @@ class HomePage extends React.Component {
    componentWillMount() {
 
       let dummy = JSON.parse(localStorage.getItem('user'));
-    if(dummy == null){
-      alert('please Login First to Access this page')
-      this.props.history.push('/');
-    }
+      if (dummy == null) {
+         NotificationWarn(firstLogin);
+         this.props.history.push('/');
+      }
 
-  }
+   }
 
    render() {
 
-   
+      console.log(process.env.REACT_APP_SECRET_KEY);
+
       if (this.state.selectedVideo == null && this.state.videos[0] == undefined) {
          return (
             <>
@@ -67,7 +69,7 @@ class HomePage extends React.Component {
                <Grid width={10} style={{ padding: '5px' }} >
                   <div><VideoDetail video={this.state.selectedVideo} /></div>
                </Grid>
-               <Grid.Column style={{padding:'0px !important'}}  width={9} >
+               <Grid.Column style={{ padding: '0px !important' }} width={9} >
                   <div><VideoList onVideoSelect={this.onVideoSelect} videos={this.state.videos} /></div>
                </Grid.Column>
             </Grid>

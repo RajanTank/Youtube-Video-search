@@ -8,6 +8,9 @@ import Video from '../component/video';
 import FormSubmit from '../component/FormSubmit';
 import VideoDetail from '../component/VideoDetails';
 import VideoList from '../component/VideoList';
+import { NotificationWarn } from '../Utility /utility';
+import {firstLogin} from '../Utility /label'
+
 
 class WatchLater extends React.Component {
 
@@ -43,8 +46,8 @@ class WatchLater extends React.Component {
     let dummyArray = [];
     dummyArray = JSON.parse(localStorage.getItem('user'));
     if (dummyArray) {
-        dummyArray.watchlater.splice(dummyArray.watchlater.indexOf(ids), 1);
-        this.setState({ids:dummyArray.watchlater});
+      dummyArray.watchlater.splice(dummyArray.watchlater.indexOf(ids), 1);
+      this.setState({ ids: dummyArray.watchlater });
       localStorage.setItem('user', JSON.stringify(dummyArray));
     }
   }
@@ -62,7 +65,7 @@ class WatchLater extends React.Component {
 
     let dummy = JSON.parse(localStorage.getItem('user'));
     if (dummy == null) {
-      alert('please Login First to Access this page')
+      NotificationWarn(firstLogin);
       this.props.history.push('/');
     }
   }

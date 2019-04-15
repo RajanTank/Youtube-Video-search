@@ -1,6 +1,7 @@
 import React from 'react';
 import Inputs from './input';
 import '../style/style.css';
+import { NotificationSuccess, NotificationError,GetLocalstorage } from '../Utility /utility';
 
 
 class LoginForm extends React.Component {
@@ -13,21 +14,20 @@ class LoginForm extends React.Component {
    componentDidMount() {
 
       let arr = [];
-      arr = JSON.parse(localStorage.getItem('user'));
-
+      arr = GetLocalstorage();
       if (arr != null) {
          this.props.history.push('/homepage');
       }
    }
 
    authenticateUser = () => {
-      const temp = JSON.parse(localStorage.getItem('user'));
+      const temp = GetLocalstorage();
       if (temp['email'] == this.state.email && temp['password'] == this.state.password) {
-         alert('successful');
+         NotificationSuccess('Successful');
          this.props.history.push('/homepage');
       }
       else {
-         alert('Plz enter valid email id and password');
+         NotificationError('Please Enter valid Email and Password');
       }
    }
    render() {

@@ -1,19 +1,18 @@
 import React from 'react';
 import VideoList from './VideoList';
-import { Grid } from 'semantic-ui-react';
-import youtube from '../api/youtube';
+
 import onFormSubmit from './FormSubmit';
 import '../style/Grid.css';
 import '../style/VideoGrid.css';
+import { videoLength } from '../config/config';
 
 class ContentData extends React.Component {
 
    state = { videos: [] };
 
-
    componentDidMount() {
 
-      onFormSubmit(this.props.category, 4).then(response => {
+      onFormSubmit(this.props.category, videoLength).then(response => {
          this.setState({ videos: response });
       });
    }

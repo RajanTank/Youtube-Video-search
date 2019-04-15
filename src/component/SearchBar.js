@@ -1,6 +1,5 @@
 import React from 'react'
-import {Button} from 'semantic-ui-react';
-
+import {appName} from '../Utility /label'
 class SearchBar extends React.Component {
 
    state = {
@@ -22,7 +21,7 @@ class SearchBar extends React.Component {
       return (
          <form onSubmit={this.onFormSubmit}>
             <div className="ui menu">
-               <div className=" ui header item">YouTube Video Search</div>
+               <div className=" ui header item">{appName}</div>
                <div className="search-bar ui input item " style={{ width: '60%' }} >
                   <div className="ui action right icon input">
                      <i className="search icon" />

@@ -1,17 +1,16 @@
 import React from 'react';
 import { Button, Icon, Card, Image } from 'semantic-ui-react';
+import { NotificationSuccess,GetLocalstorage,SetLocalstorage } from '../Utility /utility';
 
 
 class VideoItem extends React.Component {
 
-   handleClick = (event) => {
-
-      event.preventDefault();
+   handleClick = () => {
       let dummyArray = [];
-      dummyArray = JSON.parse(localStorage.getItem('user'));
+      dummyArray = GetLocalstorage();
       dummyArray.watchlater.push(this.props.video.id.videoId);
-      localStorage.setItem('user', JSON.stringify(dummyArray));
-
+      SetLocalstorage(dummyArray);
+      NotificationSuccess('Added to Watch later')
    };
 
    render() {

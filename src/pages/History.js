@@ -7,8 +7,9 @@ import Video from '../component/video';
 import { Grid } from 'semantic-ui-react';
 import VideoDetail from '../component/VideoDetails';
 import VideoList from '../component/VideoList';
-import { NotificationWarn}  from '../Utility /utility'
-import {firstLogin} from '../Utility /label'
+import { notificationWarn ,getLocalStorage,setLocalStorage}  from '../Utility /utility'
+import {firstLogin, label} from '../Utility /label'
+import { searchVideolength } from '../config/config';
 
 class History extends React.Component {
 
@@ -16,12 +17,14 @@ class History extends React.Component {
       ids: [],
       videoSelect: null,
       selectedVideo: null,
-      videos: []
+      videos: [],
+      itemWidth:'1000px',
+      titleWidth:'800px'
    }
 
    onTermSubmit = (term) => {
 
-      FormSubmit(term, 10).then(response => {
+      FormSubmit(term, searchVideolength).then(response => {
          this.setState({
             videos: response,
             flag: true
@@ -36,25 +39,26 @@ class History extends React.Component {
    }
 
    onVideoSelect = (video, videos) => {
-      this.setState({ selectedVideo: video, videos: videos });
+      this.setState({ selectedVideo: video, videos: videos,itemWidth:'345px',titleWidth:'200px' });
+      let dummyArray = getLocalStorage();
+      dummyArray.history.push(video.id.videoId);
+      setLocalStorage(dummyArray); 
    };
 
    removeItem = (ids) => {
 
-      let dummyArray = [];
-      dummyArray = JSON.parse(localStorage.getItem('user'));
+      let dummyArray = getLocalStorage();
       if (dummyArray) {
-         dummyArray.history.splice(dummyArray.watchlater.indexOf(ids), 1);
+         dummyArray.history.splice(dummyArray.history.indexOf(ids), 1);
          this.setState({ ids: dummyArray.history });
-         localStorage.setItem('user', JSON.stringify(dummyArray));
+         setLocalStorage(dummyArray);
       }
 
    }
    componentDidMount() {
 
-      let videoArray = [];
-      videoArray = JSON.parse(localStorage.getItem('user'));
-      if (videoArray) {
+      let videoArray = getLocalStorage();
+         if (videoArray) {
          this.setState({ ids: videoArray.history });
       }
 
@@ -63,9 +67,9 @@ class History extends React.Component {
 
    componentWillMount() {
 
-      let dummy = JSON.parse(localStorage.getItem('user'));
+      let dummy = getLocalStorage();
       if (dummy == null) {
-         NotificationWarn(firstLogin);
+         notificationWarn(label.firstLogin);
 
          this.props.history.push('/');
       }
@@ -103,7 +107,9 @@ class History extends React.Component {
                   <div><VideoDetail video={this.state.selectedVideo} /></div>
                </Grid>
                <Grid.Column style={{ padding: '0px !important' }} width={9} >
-                  <div><VideoList onVideoSelect={this.onVideoSelect} videos={this.state.videos} /></div>
+                  <div><VideoList onVideoSelect={this.onVideoSelect} videos={this.state.videos}
+                   itemWidth={this.state.itemWidth}
+                   titleWidth={this.state.titleWidth} /></div>
                </Grid.Column>
             </Grid>
          </>

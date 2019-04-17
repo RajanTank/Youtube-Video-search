@@ -1,7 +1,8 @@
 import React from 'react';
 import Inputs from './input';
 import '../style/style.css';
-import { NotificationSuccess, NotificationError,GetLocalstorage } from '../Utility /utility';
+import { notificationSuccess, notificationError, getLocalStorage } from '../Utility /utility';
+import { label } from '../Utility /label';
 
 
 class LoginForm extends React.Component {
@@ -14,20 +15,20 @@ class LoginForm extends React.Component {
    componentDidMount() {
 
       let arr = [];
-      arr = GetLocalstorage();
+      arr = getLocalStorage();
       if (arr != null) {
          this.props.history.push('/homepage');
       }
    }
 
    authenticateUser = () => {
-      const temp = GetLocalstorage();
+      const temp = getLocalStorage();
       if (temp['email'] == this.state.email && temp['password'] == this.state.password) {
-         NotificationSuccess('Successful');
+         notificationSuccess(label.loginSuccess);
          this.props.history.push('/homepage');
       }
       else {
-         NotificationError('Please Enter valid Email and Password');
+         notificationError(label.validLogin);
       }
    }
    render() {
@@ -39,7 +40,7 @@ class LoginForm extends React.Component {
                <h2 className="ui header">
                   <div className="">
                      Login to your account
-          </div>
+                  </div>
                </h2>
 
                <form className="ui large form">

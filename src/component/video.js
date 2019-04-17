@@ -1,22 +1,15 @@
 import React from 'react';
-import { NotificationError } from '../Utility /utility';
+import { notificationError } from '../Utility /utility';
 
 class Video extends React.Component {
 
-   componentDidMount() {
+   render() {
+
 
       if (!this.props.videoData) {
          return null;
       }
-   }
-
-   render() {
-
       const { id, snippet } = this.props.videoData;
-      if(id == null){
-         NotificationError(`can't featch video`);
-         return null;
-      }
 
 
       const videoSrc = `https://www.youtube.com/embed/${id}?autoplay=1`

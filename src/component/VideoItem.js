@@ -1,45 +1,44 @@
 import React from 'react';
-import { Button, Icon, Card, Image } from 'semantic-ui-react';
-import { NotificationSuccess,GetLocalstorage,SetLocalstorage } from '../Utility /utility';
+import { Button, Icon, Card, Image, Item, ItemGroup } from 'semantic-ui-react';
+import { notificationSuccess, getLocalStorage, setLocalStorage } from '../Utility /utility';
 
 
 class VideoItem extends React.Component {
 
-   handleClick = () => {
-      let dummyArray = [];
-      dummyArray = GetLocalstorage();
-      dummyArray.watchlater.push(this.props.video.id.videoId);
-      SetLocalstorage(dummyArray);
-      NotificationSuccess('Added to Watch later')
-   };
+  handleClick = () => {
+    let dummyArray = [];
+    dummyArray = getLocalStorage();
+    dummyArray.watchlater.push(this.props.video.id.videoId);
+    setLocalStorage(dummyArray);
+    notificationSuccess('Added to Watch later');
+  };
 
-   render() {
+  render() {
 
-      const { video, onVideoSelect, videos } = this.props;
+    const { video, onVideoSelect, videos, itemWidth, titleWidth } = this.props;
 
-      return (
-         <>
-            <Card onClick={() => onVideoSelect(video, videos)}>
-               <Image
-                  alt={video.snippet.title}
-                  className="ui image "
-                  src={video.snippet.thumbnails.medium.url}
-               />
-               <Card.Content>
-                  <Card.Description>
-                     {video.snippet.title}
-                  </Card.Description>
-               </Card.Content>
-               <Card.Content extra>
-                  <a onClick={this.handleClick}>
-                     <Icon name='clock' />Watch Later
+    return (
+      <>
+        <ItemGroup style={{ marginBottom: '0px' }}>
+          <Item style={{ width: itemWidth, }} onClick={() => onVideoSelect(video, videos)} >
+            <Item.Image
+              style={{ width: '150px' }}
+              alt={video.snippet.title}
+              className="ui image "
+              src={video.snippet.thumbnails.medium.url}
+            />
+            <div>
+              <div style={{ width: titleWidth, paddingLeft: '5px', }}> {video.snippet.title}</div>
+            </div>
+          </Item>
+          <a onClick={this.handleClick}>
+            <Icon name='clock' />Watch Later
                  </a>
-               </Card.Content>
-            </Card>
-            <hr />
-         </>
-      );
-   }
+        </ItemGroup>
+        <hr />
+      </>
+    );
+  }
 
 }
 export default VideoItem;

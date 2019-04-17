@@ -7,17 +7,18 @@ import { Grid } from 'semantic-ui-react';
 import ContentData from '../component/ContentData'
 import FormSubmit from '../component/FormSubmit';
 import '../style/Grid.css';
-import { NotificationWarn } from '../Utility /utility';
-import {firstLogin} from '../Utility /label'
+import { notificationWarn, getLocalStorage, setLocalStorage } from '../Utility /utility';
+import { firstLogin, label } from '../Utility /label'
+import { searchVideolength } from '../config/config';
 
 
 class HomePage extends React.Component {
 
-   state = { videos: [], selectedVideo: null };
+   state = { videos: [], selectedVideo: null,itemWidth:'1000px',titleWidth:'800px' };
 
    onTermSubmit = (term) => {
 
-      FormSubmit(term, 10).then(response => {
+      FormSubmit(term, searchVideolength).then(response => {
          this.setState({
             videos: response
          });
@@ -25,14 +26,18 @@ class HomePage extends React.Component {
    };
 
    onVideoSelect = (video, videos) => {
-      this.setState({ selectedVideo: video, videos: videos });
+      this.setState({ selectedVideo: video, videos: videos,itemWidth:'345px',titleWidth:'200px' });
+      let dummyArray = getLocalStorage();
+      dummyArray.history.push(video.id.videoId);
+      setLocalStorage(dummyArray);
+      
    };
 
    componentWillMount() {
 
       let dummy = JSON.parse(localStorage.getItem('user'));
       if (dummy == null) {
-         NotificationWarn(firstLogin);
+         notificationWarn(label.firstLogin);
          this.props.history.push('/');
       }
 
@@ -40,7 +45,6 @@ class HomePage extends React.Component {
 
    render() {
 
-      console.log(process.env.REACT_APP_SECRET_KEY);
 
       if (this.state.selectedVideo == null && this.state.videos[0] == undefined) {
          return (
@@ -66,12 +70,16 @@ class HomePage extends React.Component {
                <Grid width={3}>
                   <div><SideMenu /></div>
                </Grid>
-               <Grid width={10} style={{ padding: '5px' }} >
+               <Grid style={{ padding: '0px' }} >
                   <div><VideoDetail video={this.state.selectedVideo} /></div>
                </Grid>
-               <Grid.Column style={{ padding: '0px !important' }} width={9} >
-                  <div><VideoList onVideoSelect={this.onVideoSelect} videos={this.state.videos} /></div>
-               </Grid.Column>
+               <Grid style={{ padding: '0px !important'}}  >
+                  <div style={{}} ><VideoList 
+                  onVideoSelect={this.onVideoSelect} 
+                  videos={this.state.videos}
+                  itemWidth={this.state.itemWidth}
+                  titleWidth={this.state.titleWidth} /></div>
+               </Grid>
             </Grid>
          </>
       );

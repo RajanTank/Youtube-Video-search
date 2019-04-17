@@ -8,8 +8,9 @@ import Video from '../component/video';
 import FormSubmit from '../component/FormSubmit';
 import VideoDetail from '../component/VideoDetails';
 import VideoList from '../component/VideoList';
-import { NotificationWarn } from '../Utility /utility';
-import {firstLogin} from '../Utility /label'
+import { notificationWarn, getLocalStorage, setLocalStorage } from '../Utility /utility';
+import { firstLogin, label } from '../Utility /label'
+import { searchVideolength } from '../config/config';
 
 
 class WatchLater extends React.Component {
@@ -19,12 +20,15 @@ class WatchLater extends React.Component {
     videos: [],
     selectedVideo: null,
     flag: false,
-    ids: []
+    ids: [],
+    itemWidth:'1000px',
+    titleWidth:'800px'
   };
 
   onTermSubmit = (term) => {
+ 
+    FormSubmit(term, searchVideolength).then(response => {
 
-    FormSubmit(term, 10).then(response => {
       this.setState({
         videos: response,
         flag: true
@@ -37,25 +41,25 @@ class WatchLater extends React.Component {
 
   }
   onVideoSelect = (video, videos) => {
-    this.setState({ selectedVideo: video, videos: videos });
+    this.setState({ selectedVideo: video, videos: videos,itemWidth:'345px',titleWidth:'200px' });
+    let dummyArray = getLocalStorage();
+    dummyArray.history.push(video.id.videoId);
+    setLocalStorage(dummyArray);
   };
 
   removeItem = (ids) => {
 
 
-    let dummyArray = [];
-    dummyArray = JSON.parse(localStorage.getItem('user'));
+    let dummyArray = getLocalStorage()
     if (dummyArray) {
       dummyArray.watchlater.splice(dummyArray.watchlater.indexOf(ids), 1);
       this.setState({ ids: dummyArray.watchlater });
-      localStorage.setItem('user', JSON.stringify(dummyArray));
+      setLocalStorage(dummyArray);
     }
   }
   componentDidMount() {
 
-    let videoArray = [];
-    videoArray = JSON.parse(localStorage.getItem('user'));
-
+    let videoArray = getLocalStorage();
     if (videoArray) {
       this.setState({ ids: videoArray.watchlater });
     }
@@ -63,9 +67,9 @@ class WatchLater extends React.Component {
 
   componentWillMount() {
 
-    let dummy = JSON.parse(localStorage.getItem('user'));
+    let dummy = getLocalStorage();
     if (dummy == null) {
-      NotificationWarn(firstLogin);
+      notificationWarn(label.firstLogin);
       this.props.history.push('/');
     }
   }
@@ -80,7 +84,7 @@ class WatchLater extends React.Component {
             <SideMenu />
             <Video videoData={this.state.videoselected} />
             <div className="home" style={{ float: "left !important" }} >
-              <div className="responsive-video-grid-container">
+              <div className="responsive-video-grid-container" >
                 <Grids ids={this.state.ids} videoSelect={this.onWatchlaterVideoSelect}
                   removeItem={this.removeItem} />
               </div>
@@ -100,9 +104,12 @@ class WatchLater extends React.Component {
           <Grid width={10} style={{ padding: '5px' }} >
             <div><VideoDetail video={this.state.selectedVideo} /></div>
           </Grid>
-          <Grid.Column style={{ padding: '0px !important' }} width={9} >
-            <div><VideoList onVideoSelect={this.onVideoSelect} videos={this.state.videos} /></div>
-          </Grid.Column>
+          <Grid style={{ padding: '0px !important' }} width={12} >
+            <div><VideoList onVideoSelect={this.onVideoSelect}
+             videos={this.state.videos}
+             itemWidth={this.state.itemWidth}
+             titleWidth={this.state.titleWidth} /></div>
+          </Grid>
         </Grid>
       </>
     );

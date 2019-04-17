@@ -1,18 +1,18 @@
 import React from 'react';
 import VideoItem from './VideoItem';
-import {GetLocalstorage,SetLocalstorage} from '../Utility /utility';
+import {getLocalStorage,setLocalStorage} from '../Utility /utility';
 
 class VideoList extends React.Component {
 
    addToHistory = () => {
       let dummyArray = [];
-      dummyArray = GetLocalstorage();
+      dummyArray = getLocalStorage();
       dummyArray.history.push(this.props.video.id.videoId);
-      SetLocalstorage(dummyArray);
+      setLocalStorage(dummyArray);
    }
 
    render() {
-      const { videos, onVideoSelect } = this.props;
+      const { videos, onVideoSelect,itemWidth,titleWidth} = this.props;
       return (
          <div className="ui" style={{ backgroundColor: '#DADADA', float: "left" }}>
             {videos.map((video) => {
@@ -22,7 +22,9 @@ class VideoList extends React.Component {
                         key={video.id.videoId}
                         onVideoSelect={onVideoSelect}
                         video={video}
-                        videos={videos} />
+                        videos={videos}
+                        itemWidth={itemWidth}
+                        titleWidth = {titleWidth} />
                   </div>
                );
             })

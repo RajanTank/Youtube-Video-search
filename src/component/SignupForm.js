@@ -1,7 +1,8 @@
 import React from 'react';
 import Inputs from './input';
 import '../style/style.css';
-import { NotificationSuccess, NotificationWarn, NotificationError, GetLocalstorage, SetLocalstorage } from '../Utility /utility';
+import { notificationSuccess, notificationWarn, notificationError, getLocalStorage, setLocalStorage } from '../Utility /utility';
+import { label } from '../Utility /label';
 
 class SignupForm extends React.Component {
 
@@ -17,10 +18,10 @@ class SignupForm extends React.Component {
   componentDidMount() {
 
     let arr = [];
-    arr = GetLocalstorage();
+    arr = getLocalStorage();
 
     if (arr != null) {
-      NotificationWarn('Please Logout First Then Add New Account..');
+      notificationWarn(label.firstLogin);
       this.props.history.push('/homepage');
     }
   }
@@ -30,10 +31,10 @@ class SignupForm extends React.Component {
 
     const { firstname, lastname, email, password } = this.state;
     if (firstname == '' || lastname == '' || email == '' || password == '') {
-      NotificationError('Please Enter Valid Details');
+      notificationError(label.validMsg);
     } else {
-      SetLocalstorage(this.state);
-      NotificationSuccess('Sign up Successful');
+      setLocalStorage(this.state);
+      notificationSuccess(label.signUpSuccess);
       this.props.history.push('/homepage');
     }
 

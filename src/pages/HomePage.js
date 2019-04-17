@@ -7,7 +7,7 @@ import { Grid } from 'semantic-ui-react';
 import ContentData from '../component/ContentData'
 import FormSubmit from '../component/FormSubmit';
 import '../style/Grid.css';
-import { notificationWarn, getLocalStorage, setLocalStorage } from '../Utility /utility';
+import { getLocalStorage, setLocalStorage, notificationError } from '../Utility /utility';
 import { label } from '../Utility /label'
 import { searchVideolength } from '../config/config';
 
@@ -33,7 +33,7 @@ class HomePage extends React.Component {
   componentWillMount() {
     let dummy = JSON.parse(localStorage.getItem('user'));
     if (dummy == null) {
-      notificationWarn(label.firstLogin);
+      notificationError(label.firstLogin);
       this.props.history.push('/');
     }
   }
@@ -43,7 +43,7 @@ class HomePage extends React.Component {
       return (
         <>
           <SearchBar onFormSubmit={this.onTermSubmit} />
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", flexWrap: "wrap",padding:'10px' }}>
             <SideMenu />
             <div className="home ">
               <div className="responsive-video-grid-container">

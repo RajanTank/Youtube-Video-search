@@ -1,7 +1,7 @@
 .video-grid {
    display: flex;
    flex-wrap: wrap;
-   width: 1050px;
+   /* width: 1050px; */
 }
 .home {
    margin-top: 10px;

@@ -28,7 +28,7 @@ class ContentData extends React.Component {
     return (
       <>
         <h2>{this.props.category}</h2>
-        <div className="video-grid" >
+        <div className="video-grid" style={{ width: '1050px' }} >
           {this.state.videos.map((video) =>
             (
               <>

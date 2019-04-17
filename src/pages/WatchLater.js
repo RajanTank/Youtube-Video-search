@@ -8,7 +8,7 @@ import Video from '../component/video';
 import FormSubmit from '../component/FormSubmit';
 import VideoDetail from '../component/VideoDetails';
 import VideoList from '../component/VideoList';
-import { notificationWarn, getLocalStorage, setLocalStorage } from '../Utility /utility';
+import { getLocalStorage, setLocalStorage, notificationError } from '../Utility /utility';
 import { label } from '../Utility /label'
 import { searchVideolength } from '../config/config';
 
@@ -35,6 +35,9 @@ class WatchLater extends React.Component {
 
   onWatchlaterVideoSelect = (video) => {
     this.setState({ videoselected: video });
+    let dummyArray = getLocalStorage();
+    dummyArray.history.push(video.id.videoId);
+    setLocalStorage(dummyArray);
   }
 
   onVideoSelect = (video, videos) => {
@@ -63,7 +66,7 @@ class WatchLater extends React.Component {
   componentWillMount() {
     let dummy = getLocalStorage();
     if (dummy == null) {
-      notificationWarn(label.firstLogin);
+      notificationError(label.firstLogin);
       this.props.history.push('/');
     }
   }
@@ -73,7 +76,7 @@ class WatchLater extends React.Component {
       return (
         <>
           <SearchBar onFormSubmit={this.onTermSubmit} />
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex" ,padding:'10px' }}>
             <SideMenu />
             <Video videoData={this.state.videoselected} />
             <div className="home" style={{ float: "left !important" }} >

@@ -1,0 +1,30 @@
+    body {
+      background-color: #DADADA;
+    }
+    body > .grid {
+      height: 50%;
+    }
+    .column {
+      max-width: 450px;
+    }
+  .video-item{
+      display: flex !important;
+      align-items: center !important;
+      cursor: pointer;
+      padding: 10px;      
+   }
+   .video-item.item img{
+      max-width: 220px;
+   }
+   .login{
+    position:absolute !important; 
+    top: 20% !important;
+    left: 35% !important;
+    width:30% !important;
+   }
+   .sign{
+    position:absolute !important;
+     top:20% !important; 
+     left: 35% !important;
+     width:30% !important;
+   }

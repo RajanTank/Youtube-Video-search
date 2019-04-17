@@ -9,9 +9,8 @@ import FormSubmit from '../component/FormSubmit';
 import VideoDetail from '../component/VideoDetails';
 import VideoList from '../component/VideoList';
 import { notificationWarn, getLocalStorage, setLocalStorage } from '../Utility /utility';
-import { firstLogin, label } from '../Utility /label'
+import { label } from '../Utility /label'
 import { searchVideolength } from '../config/config';
-
 
 class WatchLater extends React.Component {
 
@@ -21,14 +20,12 @@ class WatchLater extends React.Component {
     selectedVideo: null,
     flag: false,
     ids: [],
-    itemWidth:'1000px',
-    titleWidth:'800px'
+    itemWidth: '1000px',
+    titleWidth: '800px'
   };
 
   onTermSubmit = (term) => {
- 
     FormSubmit(term, searchVideolength).then(response => {
-
       this.setState({
         videos: response,
         flag: true
@@ -38,18 +35,16 @@ class WatchLater extends React.Component {
 
   onWatchlaterVideoSelect = (video) => {
     this.setState({ videoselected: video });
-
   }
+
   onVideoSelect = (video, videos) => {
-    this.setState({ selectedVideo: video, videos: videos,itemWidth:'345px',titleWidth:'200px' });
+    this.setState({ selectedVideo: video, videos: videos, itemWidth: '345px', titleWidth: '200px' });
     let dummyArray = getLocalStorage();
     dummyArray.history.push(video.id.videoId);
     setLocalStorage(dummyArray);
   };
 
   removeItem = (ids) => {
-
-
     let dummyArray = getLocalStorage()
     if (dummyArray) {
       dummyArray.watchlater.splice(dummyArray.watchlater.indexOf(ids), 1);
@@ -57,8 +52,8 @@ class WatchLater extends React.Component {
       setLocalStorage(dummyArray);
     }
   }
-  componentDidMount() {
 
+  componentDidMount() {
     let videoArray = getLocalStorage();
     if (videoArray) {
       this.setState({ ids: videoArray.watchlater });
@@ -66,7 +61,6 @@ class WatchLater extends React.Component {
   }
 
   componentWillMount() {
-
     let dummy = getLocalStorage();
     if (dummy == null) {
       notificationWarn(label.firstLogin);
@@ -75,7 +69,6 @@ class WatchLater extends React.Component {
   }
 
   render() {
-
     if (this.state.videos == '') {
       return (
         <>
@@ -93,7 +86,6 @@ class WatchLater extends React.Component {
         </>
       );
     }
-
     return (
       <>
         <SearchBar onFormSubmit={this.onTermSubmit} />
@@ -106,13 +98,14 @@ class WatchLater extends React.Component {
           </Grid>
           <Grid style={{ padding: '0px !important' }} width={12} >
             <div><VideoList onVideoSelect={this.onVideoSelect}
-             videos={this.state.videos}
-             itemWidth={this.state.itemWidth}
-             titleWidth={this.state.titleWidth} /></div>
+              videos={this.state.videos}
+              itemWidth={this.state.itemWidth}
+              titleWidth={this.state.titleWidth} /></div>
           </Grid>
         </Grid>
       </>
     );
   }
 }
+
 export default WatchLater;

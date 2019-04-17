@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, Icon, Card, Image, Item, ItemGroup } from 'semantic-ui-react';
+import { Icon, Item, ItemGroup } from 'semantic-ui-react';
 import { notificationSuccess, getLocalStorage, setLocalStorage } from '../Utility /utility';
-
 
 class VideoItem extends React.Component {
 
@@ -16,7 +15,6 @@ class VideoItem extends React.Component {
   render() {
 
     const { video, onVideoSelect, videos, itemWidth, titleWidth } = this.props;
-
     return (
       <>
         <ItemGroup style={{ marginBottom: '0px' }}>
@@ -39,8 +37,8 @@ class VideoItem extends React.Component {
       </>
     );
   }
-
 }
+
 export default VideoItem;
 
 

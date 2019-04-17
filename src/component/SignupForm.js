@@ -16,19 +16,15 @@ class SignupForm extends React.Component {
   };
 
   componentDidMount() {
-
     let arr = [];
     arr = getLocalStorage();
-
     if (arr != null) {
       notificationWarn(label.firstLogin);
       this.props.history.push('/homepage');
     }
   }
 
-
   onSignUp = () => {
-
     const { firstname, lastname, email, password } = this.state;
     if (firstname == '' || lastname == '' || email == '' || password == '') {
       notificationError(label.validMsg);
@@ -37,7 +33,6 @@ class SignupForm extends React.Component {
       notificationSuccess(label.signUpSuccess);
       this.props.history.push('/homepage');
     }
-
   };
 
   render() {
@@ -53,7 +48,6 @@ class SignupForm extends React.Component {
 
             <form className="ui large form">
               <div className="ui stacked segment">
-
                 <Inputs
                   inputId={'firstname'}
                   inputType={'text'}
@@ -62,7 +56,6 @@ class SignupForm extends React.Component {
                   placeholder={'First Name'}
                   handlechange={(value, name) => { this.setState({ [name]: value }); }}
                 />
-
                 <Inputs
                   inputId={'lastname'}
                   inputType={'text'}
@@ -71,7 +64,6 @@ class SignupForm extends React.Component {
                   placeholder={'Last Name'}
                   handlechange={(value, name) => { this.setState({ [name]: value }); }}
                 />
-
                 <Inputs
                   inputId={'email'}
                   inputType={'email'}
@@ -80,7 +72,6 @@ class SignupForm extends React.Component {
                   placeholder={'Email Address'}
                   handlechange={(value, name) => { this.setState({ [name]: value }); }}
                 />
-
                 <Inputs
                   inputId={'password'}
                   inputType={'password'}
@@ -89,7 +80,6 @@ class SignupForm extends React.Component {
                   placeholder={'Password'}
                   handlechange={(value, name) => { this.setState({ [name]: value }); }}
                 />
-
                 <input
                   type="submit"
                   className="ui fluid large teal submit button"

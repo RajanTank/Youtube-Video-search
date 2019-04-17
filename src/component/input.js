@@ -9,7 +9,6 @@ class Input extends React.Component {
   };
 
   InputValidation = () => {
-
     const { inputType, handlechange, name } = this.props;
     const { value } = this.state;
     const { regex, errorMsg } = ValidationSchema[inputType];
@@ -27,6 +26,7 @@ class Input extends React.Component {
       errorMesssage: msg
     })
   }
+
   render() {
     const { inputId, name, inputType, value, placeholder } = this.props;
     return (

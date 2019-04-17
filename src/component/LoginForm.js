@@ -13,7 +13,6 @@ class LoginForm extends React.Component {
    };
 
    componentDidMount() {
-
       let arr = [];
       arr = getLocalStorage();
       if (arr != null) {
@@ -31,9 +30,8 @@ class LoginForm extends React.Component {
          notificationError(label.validLogin);
       }
    }
+
    render() {
-
-
       return (
          <div className="ui middle aligned center aligned grid log login" >
             <div className="column">
@@ -68,9 +66,9 @@ class LoginForm extends React.Component {
                   <div className="ui message">Are you new to website?<a href='/signup'> Signup</a></div>
                </form>
             </div>
-
          </div>
       );
    }
 }
+
 export default LoginForm;

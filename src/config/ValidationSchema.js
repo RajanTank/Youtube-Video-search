@@ -2,9 +2,8 @@ const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+")
 const nameRegex = /^[a-z]+$/i;
 const passwordRegex = /^[\S]{8,}$/;
 const ValidationSchema = {
-   'email': { 'regex': emailRegex, 'errorMsg': 'Enter valid email' },
-   'text': { 'regex': nameRegex, 'errorMsg': 'Enter valid name' },
-   'password': { 'regex': passwordRegex, 'errorMsg': 'Enter valid password' }
+  'email': { 'regex': emailRegex, 'errorMsg': 'Enter valid email' },
+  'text': { 'regex': nameRegex, 'errorMsg': 'Enter valid name' },
+  'password': { 'regex': passwordRegex, 'errorMsg': 'Enter valid password' }
 };
-
 export default ValidationSchema;                           

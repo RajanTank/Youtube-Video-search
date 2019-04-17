@@ -1,8 +1,5 @@
-import React from 'react'
-import youtube from '../api/youtube';
 
-
-const WatchlaterVideo = async (ids) => {
+const WatchlaterVideo = async () => {
 
    // let response  = await youtube.get('/video',{
    //    params:{
@@ -97,8 +94,6 @@ const WatchlaterVideo = async (ids) => {
      }
      
 
-   return (response.items)
-
+   return (response.items);
 }; 
-
 export default WatchlaterVideo ;

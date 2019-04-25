@@ -1,13 +1,18 @@
 import React from 'react'
 import { label } from '../Utility /label'
+import { connect } from 'react-redux';
+import { signUpData } from '../actions/actionCreater';
+
 class SearchBar extends React.Component {
 
   state = {
     term: ''
   };
 
-  onLogOutClick = event => {
-    localStorage.removeItem('user');
+  onLogOutClick = () => {
+    let { userData } = this.props;
+    userData.keepMeLoggedIn = false;
+    this.props.signUpData(userData);
     this.props.history.push('/');
   }
 
@@ -34,9 +39,13 @@ class SearchBar extends React.Component {
           </div>
         </div>
       </form>
-
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    userData: state.userData
+  }
+}
 
-export default SearchBar;
+export default connect(mapStateToProps, { signUpData })(SearchBar);

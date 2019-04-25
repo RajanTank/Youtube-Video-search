@@ -8,7 +8,7 @@ class Grid extends React.Component {
     return (
       <>
         <div className="video-grid">
-          {this.props.ids.map((id) =>
+          {Object.values(this.props.ids).map((id) =>
             (
               <VideoGrid ids={id} onVideoSelect={this.props.videoSelect}
                 removeItem={this.props.removeItem} />

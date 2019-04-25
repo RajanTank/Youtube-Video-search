@@ -10,13 +10,13 @@ class Video extends React.Component {
     const videoSrc = `https://www.youtube.com/embed/${id}?autoplay=1`
 
     return (
-      <div style={{ width: '900px', height: '600px', margin: '5px' }} >
+      <div style={{ width: '900px', height: '400px', margin: '5px' }} >
         <div className="ui embed">
           <iframe title='video player' src={videoSrc} />
         </div>
         <div className="ui segment" >
           <h4 className="ui header" > {snippet.title}</h4>
-          <p>{snippet.description}</p>
+          <p style={{ overflow: 'hidden', height: '30px' }}>{snippet.description}</p>
         </div>
         <hr />
       </div>

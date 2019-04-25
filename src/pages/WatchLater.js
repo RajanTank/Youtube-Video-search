@@ -8,80 +8,66 @@ import Video from '../component/video';
 import FormSubmit from '../component/FormSubmit';
 import VideoDetail from '../component/VideoDetails';
 import VideoList from '../component/VideoList';
-import { getLocalStorage, setLocalStorage, notificationError } from '../Utility /utility';
+import { notificationError } from '../Utility /utility';
 import { label } from '../Utility /label'
 import { searchVideolength } from '../config/config';
+import { addToHistory, signUpData, fetchVideos, selectedVideos } from '../actions/actionCreater'
+import { connect } from 'react-redux'
 
 class WatchLater extends React.Component {
 
   state = {
     videoselected: null,
-    videos: [],
-    selectedVideo: null,
-    flag: false,
-    ids: [],
     itemWidth: '1000px',
     titleWidth: '800px'
   };
 
   onTermSubmit = (term) => {
     FormSubmit(term, searchVideolength).then(response => {
-      this.setState({
-        videos: response,
-        flag: true
-      });
+      this.props.fetchVideos(response)
     });
   };
 
   onWatchlaterVideoSelect = (video) => {
     this.setState({ videoselected: video });
-    let dummyArray = getLocalStorage();
-    dummyArray.history.push(video.id.videoId);
-    setLocalStorage(dummyArray);
+    this.props.addToHistory(video.id);
   }
 
   onVideoSelect = (video, videos) => {
-    this.setState({ selectedVideo: video, videos: videos, itemWidth: '345px', titleWidth: '200px' });
-    let dummyArray = getLocalStorage();
-    dummyArray.history.push(video.id.videoId);
-    setLocalStorage(dummyArray);
+    this.setState({ itemWidth: '345px', titleWidth: '200px' });
+    this.props.addToHistory(video.id.videoId);
+    this.props.fetchVideos(videos);
+    this.props.selectedVideos(video)
   };
 
   removeItem = (ids) => {
-    let dummyArray = getLocalStorage()
+    let dummyArray = this.props.userData;
     if (dummyArray) {
       dummyArray.watchlater.splice(dummyArray.watchlater.indexOf(ids), 1);
-      this.setState({ ids: dummyArray.watchlater });
-      setLocalStorage(dummyArray);
-    }
-  }
-
-  componentDidMount() {
-    let videoArray = getLocalStorage();
-    if (videoArray) {
-      this.setState({ ids: videoArray.watchlater });
+      this.props.signUpData(dummyArray);
     }
   }
 
   componentWillMount() {
-    let dummy = getLocalStorage();
-    if (dummy == null) {
+    if (this.props.userData == null) {
       notificationError(label.firstLogin);
       this.props.history.push('/');
     }
   }
 
   render() {
-    if (this.state.videos == '') {
+    if (this.props.videos[0] === undefined) {
       return (
         <>
           <SearchBar onFormSubmit={this.onTermSubmit} />
-          <div style={{ display: "flex" ,padding:'10px' }}>
-            <SideMenu />
+          <div style={{ display: "flex", padding: '10px' }}>
+            <div><SideMenu /></div>
             <Video videoData={this.state.videoselected} />
             <div className="home" style={{ float: "left !important" }} >
               <div className="responsive-video-grid-container" >
-                <Grids ids={this.state.ids} videoSelect={this.onWatchlaterVideoSelect}
+                <Grids
+                  ids={this.props.userData.watchlater}
+                  videoSelect={this.onWatchlaterVideoSelect}
                   removeItem={this.removeItem} />
               </div>
             </div>
@@ -97,13 +83,15 @@ class WatchLater extends React.Component {
             <div><SideMenu /></div>
           </Grid>
           <Grid width={10} style={{ padding: '5px' }} >
-            <div><VideoDetail video={this.state.selectedVideo} /></div>
+            <div><VideoDetail /></div>
           </Grid>
           <Grid style={{ padding: '0px !important' }} width={12} >
-            <div><VideoList onVideoSelect={this.onVideoSelect}
-              videos={this.state.videos}
-              itemWidth={this.state.itemWidth}
-              titleWidth={this.state.titleWidth} /></div>
+            <div>
+              <VideoList onVideoSelect={this.onVideoSelect}
+                videos={this.props.videos}
+                itemWidth={this.state.itemWidth}
+                titleWidth={this.state.titleWidth} />
+            </div>
           </Grid>
         </Grid>
       </>
@@ -111,4 +99,12 @@ class WatchLater extends React.Component {
   }
 }
 
-export default WatchLater;
+const mapStateToProps = state => {
+  return {
+    videos: state.videos,
+    selectedVideo: state.selectedVideo,
+    userData: state.userData
+  }
+}
+
+export default connect(mapStateToProps, { fetchVideos, selectedVideos, signUpData, addToHistory })(WatchLater);

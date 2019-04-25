@@ -1,35 +1,35 @@
 import React from 'react';
 import Inputs from './input';
 import '../style/style.css';
-import { notificationSuccess, notificationWarn, notificationError, getLocalStorage, setLocalStorage } from '../Utility /utility';
+import { notificationSuccess, notificationWarn, notificationError } from '../Utility /utility';
 import { label } from '../Utility /label';
+import { connect } from 'react-redux';
+import { signUpData } from '../actions/actionCreater'
 
+const userData = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  keepMeLoggedIn: true,
+  watchlater: [],
+  history: []
+}
 class SignupForm extends React.Component {
 
-  state = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    watchlater: [],
-    history: []
-  };
-
   componentDidMount() {
-    let arr = [];
-    arr = getLocalStorage();
-    if (arr != null) {
-      notificationWarn(label.firstLogin);
+    if (this.props.userData != null) {
+      notificationWarn(label.addNewAcc);
       this.props.history.push('/homepage');
     }
   }
 
   onSignUp = () => {
-    const { firstname, lastname, email, password } = this.state;
+    const { firstname, lastname, email, password } = userData;
     if (firstname == '' || lastname == '' || email == '' || password == '') {
       notificationError(label.validMsg);
     } else {
-      setLocalStorage(this.state);
+      this.props.signUpData(userData);
       notificationSuccess(label.signUpSuccess);
       this.props.history.push('/homepage');
     }
@@ -43,7 +43,7 @@ class SignupForm extends React.Component {
             <h2 className="ui header">
               <div className="">
                 Sign Up
-          </div>
+              </div>
             </h2>
 
             <form className="ui large form">
@@ -54,7 +54,7 @@ class SignupForm extends React.Component {
                   title={'Full Name'}
                   name={'firstName'}
                   placeholder={'First Name'}
-                  handlechange={(value, name) => { this.setState({ [name]: value }); }}
+                  handlechange={(value, name) => { userData[name] = value }}
                 />
                 <Inputs
                   inputId={'lastname'}
@@ -62,7 +62,7 @@ class SignupForm extends React.Component {
                   title={'last Name'}
                   name={'lastName'}
                   placeholder={'Last Name'}
-                  handlechange={(value, name) => { this.setState({ [name]: value }); }}
+                  handlechange={(value, name) => { userData[name] = value }}
                 />
                 <Inputs
                   inputId={'email'}
@@ -70,7 +70,7 @@ class SignupForm extends React.Component {
                   title={'Email Address'}
                   name={'email'}
                   placeholder={'Email Address'}
-                  handlechange={(value, name) => { this.setState({ [name]: value }); }}
+                  handlechange={(value, name) => { userData[name] = value }}
                 />
                 <Inputs
                   inputId={'password'}
@@ -78,7 +78,7 @@ class SignupForm extends React.Component {
                   title={'Password'}
                   name={'password'}
                   placeholder={'Password'}
-                  handlechange={(value, name) => { this.setState({ [name]: value }); }}
+                  handlechange={(value, name) => { userData[name] = value }}
                 />
                 <input
                   type="submit"
@@ -94,4 +94,10 @@ class SignupForm extends React.Component {
   }
 }
 
-export default SignupForm;
+const mapStateToProps = state => {
+  return {
+    userData: state.userData
+  }
+}
+
+export default connect(mapStateToProps, { signUpData })(SignupForm);

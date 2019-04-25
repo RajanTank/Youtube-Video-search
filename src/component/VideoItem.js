@@ -1,19 +1,17 @@
 import React from 'react';
 import { Icon, Item, ItemGroup } from 'semantic-ui-react';
-import { notificationSuccess, getLocalStorage, setLocalStorage } from '../Utility /utility';
+import { notificationSuccess } from '../Utility /utility';
+import { addToWatchLater } from '../actions/actionCreater';
+import { connect } from 'react-redux';
 
 class VideoItem extends React.Component {
 
   handleClick = () => {
-    let dummyArray = [];
-    dummyArray = getLocalStorage();
-    dummyArray.watchlater.push(this.props.video.id.videoId);
-    setLocalStorage(dummyArray);
+    this.props.addToWatchLater(this.props.video.id.videoId);
     notificationSuccess('Added to Watch later');
   };
 
   render() {
-
     const { video, onVideoSelect, videos, itemWidth, titleWidth } = this.props;
     return (
       <>
@@ -26,12 +24,12 @@ class VideoItem extends React.Component {
               src={video.snippet.thumbnails.medium.url}
             />
             <div>
-              <div style={{ width: titleWidth, paddingLeft: '5px', }}> {video.snippet.title}</div>
+              <div style={{ width: titleWidth, paddingLeft: '5px' }}> {video.snippet.title}</div>
             </div>
           </Item>
           <a onClick={this.handleClick}>
             <Icon name='clock' />Watch Later
-                 </a>
+          </a>
         </ItemGroup>
         <hr />
       </>
@@ -39,6 +37,6 @@ class VideoItem extends React.Component {
   }
 }
 
-export default VideoItem;
+export default connect(null, { addToWatchLater })(VideoItem);
 
 

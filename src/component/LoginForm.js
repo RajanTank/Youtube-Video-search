@@ -1,28 +1,29 @@
 import React from 'react';
 import Inputs from './input';
 import '../style/style.css';
-import { notificationSuccess, notificationError, getLocalStorage } from '../Utility /utility';
+import { notificationSuccess, notificationError } from '../Utility /utility';
 import { label } from '../Utility /label';
+import { connect } from 'react-redux';
+import { signUpData } from '../actions/actionCreater'
 
+const temp = {
+   email: '',
+   password: ''
+}
 
 class LoginForm extends React.Component {
 
-   state = {
-      email: '',
-      password: ''
-   };
-
    componentDidMount() {
-      let arr = [];
-      arr = getLocalStorage();
-      if (arr != null) {
+      if (this.props.userData != null && this.props.userData.keepMeLoggedIn == true) {
          this.props.history.push('/homepage');
       }
    }
 
    authenticateUser = () => {
-      const temp = getLocalStorage();
-      if (temp['email'] == this.state.email && temp['password'] == this.state.password) {
+      const userInfo = this.props.userData;
+      if (userInfo['email'] == temp['email'] && userInfo['password'] == temp['password']) {
+         userInfo.keepMeLoggedIn = true;
+         this.props.signUpData(userInfo);
          notificationSuccess(label.loginSuccess);
          this.props.history.push('/homepage');
       }
@@ -49,8 +50,7 @@ class LoginForm extends React.Component {
                         title={'Email Address'}
                         name={'email'}
                         placeholder={'Email Address'}
-                        handlechange={(value, name) => { this.setState({ [name]: value }); }}
-
+                        handlechange={(value, name) => { temp[name] = value }}
                      />
                      <Inputs
                         inputId={'password'}
@@ -58,8 +58,7 @@ class LoginForm extends React.Component {
                         title={'Password'}
                         name={'password'}
                         placeholder={'Password'}
-                        handlechange={(value, name) => { this.setState({ [name]: value }); }}
-
+                        handlechange={(value, name) => { temp[name] = value }}
                      />
                      <input type="submit" className="ui fluid large teal submit button" value="Login" onClick={this.authenticateUser} />
                   </div>
@@ -70,5 +69,10 @@ class LoginForm extends React.Component {
       );
    }
 }
+const mapStateToProps = state => {
+   return {
+      userData: state.userData
+   };
+}
 
-export default LoginForm;
+export default connect(mapStateToProps, { signUpData })(LoginForm);

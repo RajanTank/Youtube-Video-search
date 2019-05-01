@@ -7,81 +7,63 @@ import Video from '../component/video';
 import { Grid } from 'semantic-ui-react';
 import VideoDetail from '../component/VideoDetails';
 import VideoList from '../component/VideoList';
-import { getLocalStorage, setLocalStorage, notificationError } from '../Utility /utility'
+import { notificationError } from '../Utility /utility'
 import { label } from '../Utility /label'
 import { searchVideolength } from '../config/config';
+import { connect } from 'react-redux';
+import { addToHistory, fetchVideos, selectedVideos, signUpData } from '../actions/actionCreater'
 
 class History extends React.Component {
 
   state = {
-    ids: [],
     videoSelect: null,
-    selectedVideo: null,
-    videos: [],
     itemWidth: '1000px',
     titleWidth: '800px'
   }
 
   onTermSubmit = (term) => {
     FormSubmit(term, searchVideolength).then(response => {
-      this.setState({
-        videos: response,
-        flag: true
-      });
+      this.props.fetchVideos(response);
     });
   };
 
   onHistoryVideoSelect = (video) => {
     this.setState({ videoSelect: video });
-    let dummyArray = getLocalStorage();
-    dummyArray.history.push(video.id.videoId);
-    setLocalStorage(dummyArray);
   }
 
   onVideoSelect = (video, videos) => {
-    this.setState({ selectedVideo: video, videos: videos, itemWidth: '345px', titleWidth: '200px' });
-    let dummyArray = getLocalStorage();
-    dummyArray.history.push(video.id.videoId);
-    setLocalStorage(dummyArray);
+    this.setState({ itemWidth: '345px', titleWidth: '200px' });
+    this.props.fetchVideos(videos);
+    this.props.selectedVideos(video);
+    this.props.addToHistory(video.id.videoId);
   };
 
   removeItem = (ids) => {
-    let dummyArray = getLocalStorage();
+    let dummyArray = this.props.userData;
     if (dummyArray) {
       dummyArray.history.splice(dummyArray.history.indexOf(ids), 1);
-      this.setState({ ids: dummyArray.history });
-      setLocalStorage(dummyArray);
-    }
-  }
-
-  componentDidMount() {
-    let videoArray = getLocalStorage();
-    if (videoArray) {
-      this.setState({ ids: videoArray.history });
+      this.props.signUpData(dummyArray)
     }
   }
 
   componentWillMount() {
-    let dummy = getLocalStorage();
-    if (dummy == null) {
+    if (this.props.userData == null) {
       notificationError(label.firstLogin);
       this.props.history.push('/');
     }
   }
 
   render() {
-
-    if (this.state.videos == '') {
+    if (this.props.videos[0] === undefined) {
       return (
         <>
           <SearchBar onFormSubmit={this.onTermSubmit} />
-          <div style={{ display: 'flex',padding:'10px' }}>
-            <SideMenu />
+          <div style={{ display: 'flex', padding: '10px' }}>
+            <div> <SideMenu /> </div>
             <Video videoData={this.state.videoSelect} />
-
             <div className="home" style={{ float: "left !important" }} >
               <div className="responsive-video-grid-container">
-                <Grids ids={this.state.ids} videoSelect={this.onHistoryVideoSelect}
+                <Grids ids={this.props.userData.history} videoSelect={this.onHistoryVideoSelect}
                   removeItem={this.removeItem} />
               </div>
             </div>
@@ -97,12 +79,14 @@ class History extends React.Component {
             <div><SideMenu /></div>
           </Grid>
           <Grid width={10} style={{ padding: '5px' }} >
-            <div><VideoDetail video={this.state.selectedVideo} /></div>
+            <div><VideoDetail /></div>
           </Grid>
           <Grid.Column style={{ padding: '0px !important' }} width={9} >
-            <div><VideoList onVideoSelect={this.onVideoSelect} videos={this.state.videos}
-              itemWidth={this.state.itemWidth}
-              titleWidth={this.state.titleWidth} /></div>
+            <div>
+              <VideoList onVideoSelect={this.onVideoSelect} videos={this.props.videos}
+                itemWidth={this.state.itemWidth}
+                titleWidth={this.state.titleWidth} />
+            </div>
           </Grid.Column>
         </Grid>
       </>
@@ -110,4 +94,12 @@ class History extends React.Component {
   }
 }
 
-export default History;
+const mapStateToProps = state => {
+  return {
+    userData: state.userData,
+    videos: state.videos
+  }
+}
+const mapDispatchToProps = { addToHistory, signUpData, fetchVideos, selectedVideos }
+
+export default connect(mapStateToProps, mapDispatchToProps)(History);

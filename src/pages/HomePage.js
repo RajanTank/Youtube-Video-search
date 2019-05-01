@@ -7,49 +7,50 @@ import { Grid } from 'semantic-ui-react';
 import ContentData from '../component/ContentData'
 import FormSubmit from '../component/FormSubmit';
 import '../style/Grid.css';
-import { getLocalStorage, setLocalStorage, notificationError } from '../Utility /utility';
+import { notificationError } from '../Utility /utility';
 import { label } from '../Utility /label'
 import { searchVideolength } from '../config/config';
+import { connect } from 'react-redux';
+import { fetchVideos, selectedVideos, addToHistory } from '../actions/actionCreater'
 
 class HomePage extends React.Component {
 
-  state = { videos: [], selectedVideo: null, itemWidth: '1000px', titleWidth: '800px' };
+  state = { itemWidth: '1000px', titleWidth: '800px' };
 
   onTermSubmit = (term) => {
+    this.props.selectedVideos(null);
+    this.setState({ itemWidth: '1000px', titleWidth: '800px' });
     FormSubmit(term, searchVideolength).then(response => {
-      this.setState({
-        videos: response
-      });
+      this.props.fetchVideos(response);
     });
   };
 
   onVideoSelect = (video, videos) => {
-    this.setState({ selectedVideo: video, videos: videos, itemWidth: '345px', titleWidth: '200px' });
-    let dummyArray = getLocalStorage();
-    dummyArray.history.push(video.id.videoId);
-    setLocalStorage(dummyArray);
+    this.setState({ itemWidth: '345px', titleWidth: '200px' });
+    this.props.fetchVideos(videos);
+    this.props.selectedVideos(video);
+    this.props.addToHistory(video.id.videoId);
   };
 
   componentWillMount() {
-    let dummy = JSON.parse(localStorage.getItem('user'));
-    if (dummy == null) {
+    if (this.props.userData == null && this.props.userData.keepMeLoggedIn == false) {
       notificationError(label.firstLogin);
       this.props.history.push('/');
     }
   }
 
   render() {
-    if (this.state.selectedVideo == null && this.state.videos[0] == undefined) {
+    if (this.props.selectedVideo == null && this.props.videos[0] == undefined) {
       return (
         <>
           <SearchBar onFormSubmit={this.onTermSubmit} />
-          <div style={{ display: "flex", flexWrap: "wrap",padding:'10px' }}>
-            <SideMenu />
+          <div style={{ display: "flex", flexWrap: "wrap", padding: '10px' }}>
+            <div><SideMenu /></div>
             <div className="home ">
               <div className="responsive-video-grid-container">
-                <ContentData category='cars' onVideoSelect={this.onVideoSelect} />
-                <ContentData category='bikes' onVideoSelect={this.onVideoSelect} />
-                <ContentData category='comady video' onVideoSelect={this.onVideoSelect} />
+                <ContentData category='Cars' onVideoSelect={this.onVideoSelect} />
+                <ContentData category='Bikes' onVideoSelect={this.onVideoSelect} />
+                <ContentData category='Comady video' onVideoSelect={this.onVideoSelect} />
               </div>
             </div>
           </div>
@@ -64,14 +65,16 @@ class HomePage extends React.Component {
             <div><SideMenu /></div>
           </Grid>
           <Grid style={{ padding: '0px' }} >
-            <div><VideoDetail video={this.state.selectedVideo} /></div>
+            <div><VideoDetail /></div>
           </Grid>
           <Grid style={{ padding: '0px !important' }}  >
-            <div style={{}} ><VideoList
-              onVideoSelect={this.onVideoSelect}
-              videos={this.state.videos}
-              itemWidth={this.state.itemWidth}
-              titleWidth={this.state.titleWidth} /></div>
+            <div>
+              <VideoList
+                onVideoSelect={this.onVideoSelect}
+                videos={this.props.videos}
+                itemWidth={this.state.itemWidth}
+                titleWidth={this.state.titleWidth} />
+            </div>
           </Grid>
         </Grid>
       </>
@@ -79,5 +82,14 @@ class HomePage extends React.Component {
   }
 }
 
-export default HomePage;
+const mapStateToProps = state => {
+  return {
+    videos: state.videos,
+    userData: state.userData,
+    selectedVideo: state.selectedVideo
+  }
+}
+const mapDispatchToProps = { fetchVideos, selectedVideos, addToHistory }
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
 

@@ -1,9 +1,10 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 class VideoDetail extends React.Component {
 
   validVideo = () => {
-    if (!this.props.video) {
+    if (!this.props.selectedVideo) {
       return <div></div>
     }
   };
@@ -17,10 +18,10 @@ class VideoDetail extends React.Component {
   }
 
   render() {
-    if (!this.props.video) {
+    if (!this.props.selectedVideo) {
       return <div></div>
     }
-    const { snippet, id } = this.props.video
+    const { snippet, id } = this.props.selectedVideo;
     const videoSrc = `https://www.youtube.com/embed/${id.videoId}?autoplay=1`
 
     return (
@@ -38,4 +39,10 @@ class VideoDetail extends React.Component {
   }
 }
 
-export default VideoDetail;
+const mapStateToProps = state => {
+  return {
+    selectedVideo: state.selectedVideo
+  };
+}
+
+export default connect(mapStateToProps)(VideoDetail);

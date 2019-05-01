@@ -5,15 +5,18 @@ import '../style/VideoGrid.css';
 import { videoLength } from '../config/config';
 import { Icon } from 'semantic-ui-react';
 import { notificationSuccess } from '../Utility /utility';
-import { fetchCategoryVideos, selectedVideos, addToWatchLater } from '../actions/actionCreater'
+import { selectedVideos, addToWatchLater } from '../actions/actionCreater'
 import { connect } from 'react-redux'
 
 class ContentData extends React.Component {
 
+  state = { videos: [] }
+
   componentWillMount() {
     onFormSubmit(this.props.category, videoLength).then(response => {
-      this.props.fetchCategoryVideos(response);
+      this.setState({ videos: response });
     });
+
   }
 
   handleClick = (video) => {
@@ -27,18 +30,18 @@ class ContentData extends React.Component {
         <h2>{this.props.category}</h2>
         <h4>Recommended videos for you</h4>
         <div className="video-grid" style={{ width: '1050px' }} >
-          {Object.values(this.props.catvideo).map((video) =>
+          {this.state.videos.map((video) =>
             (
               <>
                 <div className="video-preview" style={{ width: '200px' }} >
                   <img
-                    onClick={() => this.props.onVideoSelect(video, this.props.videos)}
+                    onClick={() => this.props.onVideoSelect(video, this.state.videos)}
                     width="190px"
                     alt={video.snippet.title}
                     className="ui"
                     src={video.snippet.thumbnails.medium.url}
                   />
-                  <div className="video-info" style={{ width: '160px' }} onClick={() => this.props.onVideoSelect(video, this.props.videos)}>
+                  <div className="video-info" style={{ width: '160px' }} onClick={() => this.props.onVideoSelect(video, this.state.videos)}>
                     <div className="semi-bold">{video.snippet.title}</div>
                   </div>
                   <div style={{ position: 'relative', bottom: '0px' }}>
@@ -59,10 +62,9 @@ class ContentData extends React.Component {
 
 const maptStateToProps = (state) => {
   return {
-    videos: state.categoryVideos,
     selectedVideo: state.selectedVideo,
-    catvideo: state.categoryVideos
   }
 }
+const mapDispatchToProps = { selectedVideos, addToWatchLater };
 
-export default connect(maptStateToProps, { fetchCategoryVideos, selectedVideos, addToWatchLater })(ContentData);
+export default connect(maptStateToProps, mapDispatchToProps)(ContentData);

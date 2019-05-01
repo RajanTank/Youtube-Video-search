@@ -8,7 +8,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 const persistConfig = {
   key: 'root',
   storage: storage,
-  blacklist: ['videos', 'selectedVideo','categoryVideos'],
+  blacklist: ['videos', 'selectedVideo'],
   stateReconciler: autoMergeLevel2
 };
 

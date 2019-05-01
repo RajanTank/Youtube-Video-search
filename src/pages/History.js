@@ -100,5 +100,6 @@ const mapStateToProps = state => {
     videos: state.videos
   }
 }
+const mapDispatchToProps = { addToHistory, signUpData, fetchVideos, selectedVideos }
 
-export default connect(mapStateToProps, { addToHistory, signUpData, fetchVideos, selectedVideos })(History);
+export default connect(mapStateToProps, mapDispatchToProps)(History);

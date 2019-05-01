@@ -66,7 +66,7 @@ class WatchLater extends React.Component {
             <div className="home" style={{ float: "left !important" }} >
               <div className="responsive-video-grid-container" >
                 <Grids
-                  ids={this.props.userData.watchlater}
+                  ids={this.props.ids}
                   videoSelect={this.onWatchlaterVideoSelect}
                   removeItem={this.removeItem} />
               </div>
@@ -103,8 +103,10 @@ const mapStateToProps = state => {
   return {
     videos: state.videos,
     selectedVideo: state.selectedVideo,
-    userData: state.userData
+    userData: state.userData,
+    ids: state.userData.watchlater
   }
 }
+const mapDispatchToProps = { fetchVideos, selectedVideos, signUpData, addToHistory }
 
-export default connect(mapStateToProps, { fetchVideos, selectedVideos, signUpData, addToHistory })(WatchLater);
+export default connect(mapStateToProps, mapDispatchToProps)(WatchLater);

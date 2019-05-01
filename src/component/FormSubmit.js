@@ -8,6 +8,7 @@ async function onFormSubmit(term, length) {
          maxResults: length,
       }
    });
+   console.log(response.data.items);
    return (response.data.items);
 }
 
